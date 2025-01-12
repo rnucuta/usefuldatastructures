@@ -1,6 +1,7 @@
 import unittest
 from py_dsa.datastructures import CountMinSketch
 import json
+import os
 from typing import List, Iterator
 
 def process_stream(a: List[int], b: List[int], p: List[int], w: int, stream: Iterator[int]):
@@ -34,9 +35,8 @@ class TestCMS(unittest.TestCase):
                 process_stream(a=test[0], b=test[1], p=test[2], w=test[3], stream=iter(test[4])), ans)
 
     def test_complex(self):
-        import os
-        print(os.getcwd())
-        with open("./tests/inputs/CMS_inputs.json", "rt") as f:
+        file_path = os.path.join(os.path.dirname(__file__), 'inputs', 'CMS_inputs.json')
+        with open(file_path, "rt") as f:
             test_problems = json.load(f)
 
         for test in test_problems:

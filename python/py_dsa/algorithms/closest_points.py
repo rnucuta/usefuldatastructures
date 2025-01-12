@@ -5,7 +5,8 @@ from typing import Tuple, List, Union
 
 
 def d(
-    point1: Union[List[float], Tuple[float, float]], point2: Union[List[float], Tuple[float, float]]
+    point1: Union[List[float], Tuple[float, float]],
+    point2: Union[List[float], Tuple[float, float]],
 ) -> float:
     """Calculates Euclidean distance between two points"""
     return math.sqrt((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2)
