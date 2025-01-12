@@ -34,6 +34,8 @@ class TestCMS(unittest.TestCase):
                 process_stream(a=test[0], b=test[1], p=test[2], w=test[3], stream=iter(test[4])), ans)
 
     def test_complex(self):
+        import os
+        print(os.getcwd())
         with open("./tests/inputs/CMS_inputs.json", "rt") as f:
             test_problems = json.load(f)
 
