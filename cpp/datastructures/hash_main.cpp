@@ -8,9 +8,9 @@
 #include "HashMap.h"
 #include <sstream>
 #include <chrono>
-#include <stdio.h> 
+#include <stdio.h>
 #include <stdlib.h>
-#include <time.h> 
+#include <time.h>
 
 using namespace std;
 using namespace std::chrono;
@@ -27,7 +27,7 @@ int main()
    int vin = 1;
    for(int i = 1; i<=100000; i++){
       hash->hashInsert(i);
-   } 
+   }
 
    int insert_average = 0;
    for (int i=0; i<10; i++){
@@ -37,7 +37,7 @@ int main()
       auto duration = duration_cast<microseconds>(stop - start);
       insert_average += duration.count();
    }
-    
+
    cout << "Time taken by insert: " << insert_average/10 << " microseconds" << endl;
 
    int deletion_average = 0;

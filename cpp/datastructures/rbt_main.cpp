@@ -1,6 +1,6 @@
 // Raymond Nucuta Honors Project CSE 310 Fall 2022
 // skeleton code sourced from Feng
-// red black tree implementation 
+// red black tree implementation
 
 // to compile and run:
 // g++ -g -Wall rbt_main.cpp RedBlackTree.cpp -o rbt
@@ -16,7 +16,7 @@ using namespace std::chrono;
 int main()
 {
    RedBlackTree* rbt = new RedBlackTree();
-   
+
    srand (time(NULL));
     int count = 1;
     while (count<=1000) {
@@ -33,7 +33,7 @@ int main()
         auto duration = duration_cast<microseconds>(stop - start);
         insert_average += duration.count();
     }
-    
+
     cout << "Time taken by insert: " << insert_average/10 << " microseconds" << endl;
 
     int deletion_average = 0;
@@ -57,6 +57,6 @@ int main()
     }
 
     cout << "Time taken by search: " << search_average/10 << " microseconds" << endl;
-  
+
    return 0;
 }

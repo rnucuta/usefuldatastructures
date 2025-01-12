@@ -34,13 +34,13 @@ class RedBlackTree
         void deleteFix(Node *x);
         void insertNode(Node *node);
         void fixUp(Node *node);
-        
+
 
         void preOrderTraversal(Node *node);
         void inorderTraversal(Node *node);
         void postOrderTraversal(Node *node);
 
-        
+
         Node* findMaximumNode(Node *node);
         Node* treeSearch(int data);
         void leftRotate(Node *node);

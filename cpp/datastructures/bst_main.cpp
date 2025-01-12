@@ -5,9 +5,9 @@
 
 #include <iostream>
 #include <chrono>
-#include <stdio.h> 
+#include <stdio.h>
 #include <stdlib.h>
-#include <time.h> 
+#include <time.h>
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -94,7 +94,7 @@ class BST {
                 << setw(8)  << temp->data
                 << " is deleted from the bst." << endl;
             delete temp;
-            
+
         }
 
         return t;
@@ -187,7 +187,7 @@ int main() {
         auto duration = duration_cast<microseconds>(stop - start);
         insert_average += duration.count();
     }
-    
+
     cout << "Time taken by insert: " << insert_average/10 << " microseconds" << endl;
 
 
@@ -213,5 +213,5 @@ int main() {
 
     cout << "Time taken by search: " << search_average/10 << " microseconds" << endl;
 
-    return 0; 
+    return 0;
 }

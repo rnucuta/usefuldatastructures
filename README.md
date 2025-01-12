@@ -11,6 +11,12 @@ This repository contains carefully crafted implementations of classic data struc
 - Efficient implementations
 - Practical usage examples
 
+You can install the package locally by running
+```bash
+cd python
+python3 -m pip install -Ue .
+```
+
 ## Current Implementations
 
 ### Data Structures
@@ -76,7 +82,7 @@ Contributions are welcome! Whether it's:
 - Enhancing documentation
 - Fixing bugs
 
-Please feel free to submit pull requests or open issues for discussion.
+Please feel free to submit pull requests or open issues for discussion. Before committing, ensure that the python project passes linting checks by running `pre-commit run --all`. Unittests can be ran through `python3 -m unittest discover -s tests -p "*.py"`. These will be automatically checked as well through Github Actions.
 
 <!-- ## License
 

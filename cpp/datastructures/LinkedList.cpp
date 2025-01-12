@@ -10,7 +10,7 @@ LinkedList::~LinkedList()
     Element* curr = head;
     Element* prev = NULL;
     int ElementCount = 0;
-    
+
     while (curr != NULL) {
         prev = curr;
         curr = curr->next;
@@ -72,7 +72,7 @@ bool LinkedList::deleteElement(int key)
 {
      Element* curr = head;
      Element* prev = NULL;
-    
+
     if (head->key == key) {
         head = head->next;
         return true;

@@ -300,7 +300,7 @@ Node* RedBlackTree::treeSearch(int data) {
             break;
             }
         x_key = to_string(x->data);
-    } 
+    }
     if (x == TNULL) {
         print_missing(data);
     }
@@ -399,7 +399,7 @@ void RedBlackTree::treeInorder()
     inorderTraversal(root);
 }
 
-void RedBlackTree::treePostorder() 
+void RedBlackTree::treePostorder()
 {
     postOrderTraversal(root);
 }
@@ -418,14 +418,14 @@ void RedBlackTree::treePredecessor(int data)
            print(out);
            return;
         }
-        
+
     }
     else {
         cout << "the key is not found" << endl;
     }
 }
 
-void RedBlackTree::treeSucessor(int data) 
+void RedBlackTree::treeSucessor(int data)
 {
     Node* x = treeSearch(data);
     if (x != TNULL) {
@@ -439,7 +439,7 @@ void RedBlackTree::treeSucessor(int data)
            print(out);
            return;
         }
-        
+
     }
     else {
         cout << "the key is not found" << endl;
@@ -465,7 +465,7 @@ void RedBlackTree::print(Node *node)
 }
 
 
-int RedBlackTree::compareNodes(Node *node, string key) 
+int RedBlackTree::compareNodes(Node *node, string key)
 {
     int val = 0;
     string node_key = to_string(node->data);

@@ -1,0 +1,29 @@
+name: Run py_dsa unittests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: [3.13]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          cd ./python
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -Ue .
+
+      - name: Run tests
+        run: |
+          python -m unittest discover -s tests -p "*.py"

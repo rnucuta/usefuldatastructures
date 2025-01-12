@@ -76,7 +76,7 @@ void HashMap::hashDisplay()
         cout << "HashTable["<< i << "]"<< ", " << "size = " << s << endl;
         hashTable[i].displayList();
         cout << "\n";
-    } 
+    }
 }
 
 int HashMap::hashFunction(string key)
