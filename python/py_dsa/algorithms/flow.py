@@ -1,13 +1,13 @@
 from collections import deque
 from py_dsa.datastructures import MatchingGraph
-from typing import List
+from typing import List, Dict, Any, Optional, Tuple
 
 
 class MaxFlow:
     def __init__(self, MG: MatchingGraph):
         self.MG = MG
 
-    def find_path(self) -> List[int]:
+    def find_path(self) -> Optional[List[Any]]:
         """Find a simple path from source to sink using BFS.
 
         Returns:
@@ -62,7 +62,7 @@ class MaxFlow:
         return None
 
     # get path from BFS by traversing through parents array
-    def reconstruct_path(self, parent: List[int]) -> List[int]:
+    def reconstruct_path(self, parent: dict) -> List[Tuple[Any, Any]]:
         """Reconstruct the path from source to sink using the parent mapping.
 
         Args:
@@ -81,7 +81,7 @@ class MaxFlow:
         path.reverse()
         return path
 
-    def bottleneck(self, path: List[int]) -> int:
+    def bottleneck(self, path: List[Any]) -> float:
         """Find the minimum residual capacity of any edge on the given path.
 
         Args:
@@ -108,11 +108,11 @@ class MaxFlow:
         return b
 
     # update residual graph with bottleneck
-    def augment(self, path: List[int], b: int) -> None:
+    def augment(self, path: List[Tuple[Any, Any]], b: float) -> None:
         """Augment the flow along the given path by the bottleneck value.
 
         Args:
-            path (List[int]): The path along which to augment flow.
+            path (List[Tuple[Any, Any]]): The path along which to augment flow.
             b (int): The bottleneck value to augment by.
 
         """
@@ -127,11 +127,11 @@ class MaxFlow:
                 # print(F[v][u])
                 self.MG.update_residual_edge_weight(u, v, F_uv - b)
 
-    def max_flow_val(self) -> int:
+    def max_flow_val(self) -> float:
         """Calculate the maximum flow value from source to sink.
 
         Returns:
-            int: The maximum flow value.
+            float: The maximum flow value.
 
         """
         path = self.find_path()

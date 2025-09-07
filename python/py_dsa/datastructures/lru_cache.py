@@ -1,10 +1,12 @@
+# https://leetcode.com/problems/lru-cache/
+
 from typing import Generic, TypeVar, Dict
+from functools import wraps
 
 KEY_T = TypeVar("KEY_T")
 VAL_T = TypeVar("VAL_T")
 
 # TODO: add dependency onto normal LL
-
 
 class Node:
     def __init__(
@@ -129,3 +131,21 @@ class LRUCache:
     def __len__(self) -> int:
         """Return the number of items in the cache."""
         return self.order.len
+
+def lru_cache(maxsize=128):
+    def decorator(func):
+        cache = LRUCache(maxsize)
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # Create a key from args and sorted kwargs
+            # to prevent duplicate calls (must be hashable)
+            key = (args, tuple(sorted(kwargs.items())))
+            try:
+                return cache.get(key)
+            except KeyError:
+                result = func(*args, **kwargs)
+                cache.put(key, result)
+                return result
+        return wrapper
+    return decorator

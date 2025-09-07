@@ -75,7 +75,7 @@ class DisjointSet(Generic[T]):
         """
         if self.parent[u] <= 0:
             return u
-        self.parent[u] = self.find_set(self.parent[u])
+        self.parent[u] = self._find_set(self.parent[u])
         return self.parent[u]
 
     def link(self, u: "T", v: "T") -> None:

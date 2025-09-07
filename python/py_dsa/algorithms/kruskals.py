@@ -6,6 +6,7 @@ from collections import defaultdict, deque
 
 
 class MST:
+    """Minimum Spanning Tree"""
     def __init__(self, nodes: int):
         """Initialize the MST with a given number of nodes."""
         self.num_nodes = nodes

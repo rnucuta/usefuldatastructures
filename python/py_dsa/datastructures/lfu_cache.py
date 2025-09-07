@@ -1,6 +1,7 @@
-from collections import defaultdict
-# TODO: make accessible as function wrapper
+#https://leetcode.com/problems/lfu-cache/description/
 
+from collections import defaultdict
+from functools import wraps
 
 class Node:
     def __init__(
@@ -141,3 +142,21 @@ class LFUCache:
 
         node.freq += 1
         self.freqMap[node.freq].push(node)
+
+def lfu_cache(maxsize=128):
+    def decorator(func):
+        cache = LFUCache(maxsize)
+
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # Create a key from args and sorted kwargs
+            # to prevent duplicate calls (must be hashable)
+            key = (args, tuple(sorted(kwargs.items())))
+            try:
+                return cache.get(key)
+            except KeyError:
+                result = func(*args, **kwargs)
+                cache.put(key, result)
+                return result
+        return wrapper
+    return decorator

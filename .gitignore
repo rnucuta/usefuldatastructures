@@ -1,10 +1,14 @@
 # Unfinished files
+# cpp
 cpp/malloc
-python/py_dsa/algorithms/knapsack.py
-python/py_dsa/algorithms/select.py
-python/py_dsa/algorithms/bfs_01.py
 cpp/datastructures/double_ended_heap.cpp
 cpp/datastructures/MyVector.h
+cpp/datastructures/big_int.cpp
+cpp/datastructures/unique_pointer.cpp
+
+# python
+python/py_dsa/algorithms/select.py
+python/py_dsa/algorithms/bfs_01.py
 python/py_dsa/datastructures/kSmallestBST.py
 python/py_dsa/datastructures/HuffmanEncoding.py
 python/py_dsa/datastructures/FibHeap.py
@@ -14,11 +18,14 @@ python/py_dsa/datastructures/rolling_analytics.py
 python/py_dsa/datastructures/rope.py
 python/py_dsa/datastructures/linked_list.py
 python/py_dsa/datastructures/sorted_linked_list.py
-ideas.txt
 python/py_dsa/algorithms/stable_matching.py
 python/py_dsa/datastructures/treap_list.py
 python/py_dsa/datastructures/treap_map.py
 python/tests/*.png
+
+# misc
+ideas.txt
+.cursor/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
