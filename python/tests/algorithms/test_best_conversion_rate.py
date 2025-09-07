@@ -51,4 +51,3 @@ class TestBestConversionRate(unittest.TestCase):
         actual = best_conversion_rate(g, source, destination)
         self.assertAlmostEqual(actual, expected, places=6,
             msg=f"Failed for n={graph_size}, source={source}, dest={destination}")
-        

@@ -36,10 +36,13 @@ repos:
     # Run the linter.
     - id: ruff
       args: [ --fix ]
+      exclude: "^python/tests/.*$"
     # Run the formatter.
     - id: ruff-format
+      exclude: "^python/tests/.*$"
 
 - repo: https://github.com/RobertCraigie/pyright-python
   rev: v1.1.391
   hooks:
     - id: pyright
+      exclude: "^python/tests/.*$"

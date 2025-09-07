@@ -6,6 +6,7 @@ from typing import TypeVar, Generic
 
 T = TypeVar("valT")
 
+
 class BoundedBlockingQueue(Generic[T]):
     def __init__(self, capacity: "T"):
         self.dq = deque([], maxlen=capacity)

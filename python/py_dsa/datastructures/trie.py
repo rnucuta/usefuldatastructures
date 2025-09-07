@@ -1,12 +1,13 @@
 """test"""
 
 from collections import deque
+from typing import Optional
 
 
 class TrieNode:
     """Represents a single node in the Trie."""
 
-    def __init__(self, word: str = None):
+    def __init__(self, word: Optional[str] = None):
         """Initializes a TrieNode with optional word and initializes children and count."""
         self.children = {}
         self.word = word

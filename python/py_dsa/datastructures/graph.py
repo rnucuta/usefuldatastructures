@@ -1,5 +1,6 @@
 import matplotlib
-matplotlib.use('Agg')
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import networkx as nx
 from collections import defaultdict
@@ -11,16 +12,19 @@ NODE_T = TypeVar("NODE_T")
 
 class GraphError(Exception):
     """Base exception for graph operations."""
+
     pass
 
 
 class NodeNotFoundError(GraphError):
     """Raised when attempting to access a node that doesn't exist."""
+
     pass
 
 
 class EdgeNotFoundError(GraphError):
     """Raised when attempting to access an edge that doesn't exist."""
+
     pass
 
 
@@ -56,17 +60,17 @@ class Graph(ABC, Generic[NODE_T]):
 
 class BaseGraph(Graph[NODE_T]):
     """Base implementation providing common node management functionality.
-    
+
     This class handles the boilerplate of node indexing, storage, and basic
     validation, allowing subclasses to focus on their specific edge storage
     and retrieval logic.
     """
-    
+
     def __init__(self):
         self._nodes: List[NODE_T] = []
         self._node_to_idx: Dict[NODE_T, int] = {}
         self._idx_counter = 0
-    
+
     def add_node(self, node: NODE_T) -> bool:
         """Add a node to the graph.
 
@@ -78,13 +82,14 @@ class BaseGraph(Graph[NODE_T]):
 
         Raises:
             TypeError: If node is None.
+
         """
         if node is None:
             raise TypeError("Node cannot be None")
-            
+
         if node in self._node_to_idx:
             return False
-            
+
         self._nodes.append(node)
         self._node_to_idx[node] = self._idx_counter
         self._idx_counter += 1
@@ -95,6 +100,7 @@ class BaseGraph(Graph[NODE_T]):
 
         Returns:
             List[NODE_T]: A list of nodes in the graph.
+
         """
         return self._nodes.copy()
 
@@ -109,6 +115,7 @@ class BaseGraph(Graph[NODE_T]):
 
         Raises:
             NodeNotFoundError: If the node doesn't exist in the graph.
+
         """
         if node not in self._node_to_idx:
             raise NodeNotFoundError(f"Node {node} not found in graph")
@@ -119,9 +126,10 @@ class BaseGraph(Graph[NODE_T]):
 
         Returns:
             int: The number of nodes in the graph.
+
         """
         return len(self._nodes)
-    
+
     def has_node(self, node: NODE_T) -> bool:
         """Check if a node exists in the graph.
 
@@ -130,9 +138,10 @@ class BaseGraph(Graph[NODE_T]):
 
         Returns:
             bool: True if the node exists, False otherwise.
+
         """
         return node in self._node_to_idx
-    
+
     def _validate_nodes_exist(self, *nodes: NODE_T) -> None:
         """Validate that all given nodes exist in the graph.
 
@@ -141,6 +150,7 @@ class BaseGraph(Graph[NODE_T]):
 
         Raises:
             NodeNotFoundError: If any node doesn't exist.
+
         """
         for node in nodes:
             if not self.has_node(node):
@@ -149,7 +159,7 @@ class BaseGraph(Graph[NODE_T]):
 
 class WeightedGraph(BaseGraph[NODE_T]):
     """A graph with weighted edges stored as adjacency dictionaries."""
-    
+
     def __init__(self):
         super().__init__()
         self._adjacency: Dict[NODE_T, Dict[NODE_T, float]] = defaultdict(dict)
@@ -164,10 +174,11 @@ class WeightedGraph(BaseGraph[NODE_T]):
 
         Raises:
             TypeError: If weight is not a number.
+
         """
         if not isinstance(weight, (int, float)):
             raise TypeError("Edge weight must be a number")
-            
+
         self.add_node(source)
         self.add_node(dest)
         self._adjacency[source][dest] = weight
@@ -183,10 +194,11 @@ class WeightedGraph(BaseGraph[NODE_T]):
 
         Raises:
             NodeNotFoundError: If the source node doesn't exist.
+
         """
         self._validate_nodes_exist(source)
         return self._adjacency[source].copy()
-    
+
     def get_edge_weight(self, source: NODE_T, dest: NODE_T) -> float:
         """Get the weight of an edge between two nodes.
 
@@ -200,6 +212,7 @@ class WeightedGraph(BaseGraph[NODE_T]):
         Raises:
             NodeNotFoundError: If either node doesn't exist.
             EdgeNotFoundError: If the edge doesn't exist.
+
         """
         self._validate_nodes_exist(source, dest)
         if dest not in self._adjacency[source]:
@@ -209,7 +222,7 @@ class WeightedGraph(BaseGraph[NODE_T]):
 
 class UnweightedGraph(BaseGraph[NODE_T]):
     """A graph with unweighted edges stored as adjacency sets."""
-    
+
     def __init__(self):
         super().__init__()
         self._adjacency: Dict[NODE_T, Set[NODE_T]] = defaultdict(set)
@@ -220,6 +233,7 @@ class UnweightedGraph(BaseGraph[NODE_T]):
         Args:
             source (NODE_T): The source node.
             dest (NODE_T): The destination node.
+
         """
         self.add_node(source)
         self.add_node(dest)
@@ -236,10 +250,11 @@ class UnweightedGraph(BaseGraph[NODE_T]):
 
         Raises:
             NodeNotFoundError: If the source node doesn't exist.
+
         """
         self._validate_nodes_exist(source)
         return self._adjacency[source].copy()
-    
+
     def has_edge(self, source: NODE_T, dest: NODE_T) -> bool:
         """Check if an edge exists between two nodes.
 
@@ -252,6 +267,7 @@ class UnweightedGraph(BaseGraph[NODE_T]):
 
         Raises:
             NodeNotFoundError: If either node doesn't exist.
+
         """
         self._validate_nodes_exist(source, dest)
         return dest in self._adjacency[source]
@@ -259,11 +275,11 @@ class UnweightedGraph(BaseGraph[NODE_T]):
 
 class MatchingGraph(Graph[NODE_T]):
     """A specialized graph for matching algorithms with residual graph support."""
-    
+
     def __init__(self, source: NODE_T, sink: NODE_T):
         if source == sink:
             raise ValueError("Source and sink must be different nodes")
-            
+
         self._adjacency = defaultdict(lambda: defaultdict(int))
         self._residual = defaultdict(lambda: defaultdict(int))
         self._nodes = set()
@@ -282,6 +298,7 @@ class MatchingGraph(Graph[NODE_T]):
 
         Returns:
             NODE_T: The source node.
+
         """
         return self._source
 
@@ -290,6 +307,7 @@ class MatchingGraph(Graph[NODE_T]):
 
         Returns:
             NODE_T: The sink node.
+
         """
         return self._sink
 
@@ -304,12 +322,13 @@ class MatchingGraph(Graph[NODE_T]):
         Raises:
             TypeError: If weight is not an integer.
             ValueError: If weight is negative.
+
         """
         if not isinstance(w, int):
             raise TypeError("Edge weight must be an integer")
         if w < 0:
             raise ValueError("Edge weight cannot be negative")
-            
+
         self._adjacency[u][v] = w
         self._nodes.add(v)
         self._nodes.add(u)
@@ -322,6 +341,7 @@ class MatchingGraph(Graph[NODE_T]):
 
         Raises:
             ValueError: If trying to add source or sink nodes (they're managed automatically).
+
         """
         if u == self._source or u == self._sink:
             raise ValueError("Cannot manually add source or sink nodes")
@@ -339,6 +359,7 @@ class MatchingGraph(Graph[NODE_T]):
 
         Raises:
             NodeNotFoundError: If the node doesn't exist.
+
         """
         if u not in self._nodes:
             raise NodeNotFoundError(f"Node {u} not found in graph")
@@ -355,6 +376,7 @@ class MatchingGraph(Graph[NODE_T]):
 
         Raises:
             NodeNotFoundError: If the node doesn't exist.
+
         """
         if u not in self._nodes:
             raise NodeNotFoundError(f"Node {u} not found in graph")
@@ -365,6 +387,7 @@ class MatchingGraph(Graph[NODE_T]):
 
         Returns:
             Iterator[NODE_T]: An iterator over the nodes in the graph.
+
         """
         return iter(self._nodes)
 
@@ -379,10 +402,11 @@ class MatchingGraph(Graph[NODE_T]):
 
         Raises:
             NodeNotFoundError: If the node doesn't exist.
+
         """
         if node not in self._nodes:
             raise NodeNotFoundError(f"Node {node} not found in graph")
-            
+
         idx = 0
         for n in self._nodes:
             if n == node:
@@ -395,6 +419,7 @@ class MatchingGraph(Graph[NODE_T]):
 
         Returns:
             Iterator[NODE_T]: An iterator over the residual nodes.
+
         """
         return iter(self._residual.keys())
 
@@ -410,6 +435,7 @@ class MatchingGraph(Graph[NODE_T]):
 
         Raises:
             NodeNotFoundError: If either node doesn't exist.
+
         """
         if u not in self._nodes or v not in self._nodes:
             raise NodeNotFoundError(f"Node {u} or {v} not found in graph")
@@ -427,6 +453,7 @@ class MatchingGraph(Graph[NODE_T]):
 
         Raises:
             NodeNotFoundError: If either node doesn't exist.
+
         """
         if u not in self._nodes or v not in self._nodes:
             raise NodeNotFoundError(f"Node {u} or {v} not found in graph")
@@ -444,6 +471,7 @@ class MatchingGraph(Graph[NODE_T]):
 
         Raises:
             NodeNotFoundError: If either node doesn't exist.
+
         """
         if u not in self._nodes or v not in self._nodes:
             raise NodeNotFoundError(f"Node {u} or {v} not found in graph")
@@ -461,6 +489,7 @@ class MatchingGraph(Graph[NODE_T]):
 
         Raises:
             NodeNotFoundError: If either node doesn't exist.
+
         """
         if u not in self._nodes or v not in self._nodes:
             raise NodeNotFoundError(f"Node {u} or {v} not found in graph")
@@ -477,6 +506,7 @@ class MatchingGraph(Graph[NODE_T]):
         Raises:
             NodeNotFoundError: If either node doesn't exist.
             ValueError: If weight is negative.
+
         """
         if u not in self._nodes or v not in self._nodes:
             raise NodeNotFoundError(f"Node {u} or {v} not found in graph")
@@ -495,12 +525,13 @@ class MatchingGraph(Graph[NODE_T]):
         Raises:
             NodeNotFoundError: If either node doesn't exist.
             ValueError: If weight is not positive.
+
         """
         if u not in self._nodes or v not in self._nodes:
             raise NodeNotFoundError(f"Node {u} or {v} not found in graph")
         if w <= 0:
             raise ValueError("Assignment weight must be positive")
-            
+
         # For bipartite graphs to add initial flow
         self._residual[self._source][u] += w
         self._residual[u][v] += w
@@ -511,6 +542,7 @@ class MatchingGraph(Graph[NODE_T]):
 
         Args:
             fname (str, optional): The filename to save the visualization. Defaults to 'test.png'.
+
         """
         nx_graph = nx.DiGraph()
 

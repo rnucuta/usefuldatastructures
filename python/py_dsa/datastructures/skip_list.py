@@ -1,5 +1,5 @@
 import random
-from typing import Generic, TypeVar, List
+from typing import Generic, TypeVar, List, Optional
 
 T = TypeVar("T")
 
@@ -15,10 +15,10 @@ class SkipNode:
 
     """
 
-    def __init__(self, val: T, level: int):
-        self.val = val
-        self.next = [None] * level
-        self.level = level
+    def __init__(self, val: Optional[T], level: int):
+        self.val: Optional[T] = val
+        self.next: List[Optional[SkipNode]] = [None] * level
+        self.level: int = level
 
 
 class SkipList(Generic[T]):
@@ -45,7 +45,7 @@ class SkipList(Generic[T]):
         self.max_level: int = max_level
         self.p: float = p
         self.sentinel: SkipNode = SkipNode(None, self.max_level)
-        self.root: SkipNode = None  # root points to the linked list at the bottom level
+        self.root: Optional[SkipNode] = None  # root points to the linked list at the bottom level
         self._size = 0
 
     def insert(self, x: int) -> None:
@@ -81,7 +81,7 @@ class SkipList(Generic[T]):
 
         self._size += 1
 
-    def search(self, x: int) -> SkipNode:
+    def search(self, x: int) -> Optional[SkipNode]:
         """Searches for a value in the Skip List.
 
         Args:
@@ -112,7 +112,7 @@ class SkipList(Generic[T]):
             return
 
         # search block
-        temp: SkipNode = self.sentinel
+        temp: Optional[SkipNode] = self.sentinel
         for i in range(self.max_level - 1, -1, -1):
             while temp.next[i] and temp.next[i].val < x:
                 temp = temp.next[i]
@@ -127,7 +127,7 @@ class SkipList(Generic[T]):
 
     def __str__(self):
         s: List[str] = ["["]
-        tmp: SkipNode = self.root
+        tmp: Optional[SkipNode] = self.root
         for i in range(self._size):
             if i != self._size - 1:
                 s.append(str(tmp.val) + ", ")
