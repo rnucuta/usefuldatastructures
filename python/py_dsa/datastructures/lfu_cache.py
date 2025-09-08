@@ -2,81 +2,32 @@
 
 from collections import defaultdict
 from functools import wraps
-from typing import Optional, Callable, Any, Hashable, Dict
+from typing import TypeVar, Generic, Optional, Callable, Any, Hashable, Dict
+from py_dsa.datastructures.doubly_linked_list import DoublyLinkedList, AbstractNode
 
+KEY_T = TypeVar("KEY_T")
+VAL_T = TypeVar("VAL_T")
 
-class Node:
-    def __init__(self, 
-        key: Hashable = 0, 
-        val: Any = 0, 
-        next: Optional["Node"] = None, 
-        prev: Optional["Node"] = None
+class Node(Generic[KEY_T, VAL_T], AbstractNode["Node"]):
+    def __init__(
+        self,
+        key: KEY_T,
+        val: VAL_T,
+        next: Optional["Node[KEY_T, VAL_T]"] = None,
+        prev: Optional["Node[KEY_T, VAL_T]"] = None,
     ):
         self.key = key
         self.val = val
-        self.freq = 1
+        self.freq: int = 1
         self.next = next
         self.prev = prev
 
-
-class DoublyLinkedList:
-    def __init__(self):
-        self.head = Node()
-        self.tail = Node()
-        self.head.next = self.tail
-        self.tail.prev = self.head
-        self.size = 0
-
-    def push(self, node: "Node") -> None:
-        """Inserts a new node at the beginning of the doubly linked list.
-
-        This method adds a new node to the front of the list, updating the next and previous pointers of adjacent nodes accordingly.
-
-        Args:
-            node (Node): The node to be inserted into the list.
-
-        """
-        node.next = self.head.next
-        node.prev = self.head
-        assert self.head.next is not None
-        self.head.next.prev = node
-        self.head.next = node
-        self.size += 1
-
-    def pop(self) -> Optional["Node"]:
-        """Removes and returns the last node from the doubly linked list.
-
-        This method removes the last node from the list and returns it. If the list is empty, it returns None.
-
-        Returns:
-            Node: The last node from the list, or None if the list is empty.
-
-        """
-        if self.size == 0:
-            return None
-        node = self.tail.prev
-        assert node is not None
-        self.remove(node)
-        return node
-
-    def remove(self, node: "Node") -> None:
-        """Removes a node from the doubly linked list.
-
-        This method removes the specified node from the list, updating the next and previous pointers
-        of adjacent nodes accordingly.
-
-        Args:
-            node (Node): The node to be removed from the list.
-
-        """
-        assert node.prev is not None
-        assert node.next is not None
-        node.prev.next = node.next
-        node.next.prev = node.prev
-        self.size -= 1
+    def __str__(self):
+        """Return a string representation of the node."""
+        return "[key: {}, val: {}, freq: {}]".format(self.key, self.val, self.freq)
 
 
-class LFUCache:
+class LFUCache(Generic[KEY_T, VAL_T]):
     """A class representing a Least Frequently Used (LFU) Cache.
     Now supports any hashable key and any value type.
     """
@@ -84,11 +35,11 @@ class LFUCache:
     def __init__(self, capacity: int):
         self.capacity = capacity
         self.minFreq = 0
-        self.cache: Dict[Hashable, Node] = {}
-        self.freqMap = defaultdict(DoublyLinkedList)
+        self.cache: Dict[KEY_T, Node] = {}
+        self.freqMap: Dict[int, DoublyLinkedList] = defaultdict(lambda: DoublyLinkedList())
         self.size = 0
 
-    def get(self, key: Hashable) -> Any:
+    def get(self, key: KEY_T) -> Optional[VAL_T]:
         """Retrieves the value associated with the given key from the cache.
 
         This method retrieves the value associated with the given key from the cache.
@@ -107,7 +58,7 @@ class LFUCache:
         self._update(node)
         return node.val
 
-    def put(self, key: Hashable, value: Any) -> None:
+    def put(self, key: KEY_T, value: Any) -> None:
         """Inserts or updates a key-value pair in the cache.
 
         This method inserts a new key-value pair into the cache or updates the value of an existing key.
@@ -129,25 +80,37 @@ class LFUCache:
         else:
             if self.size == self.capacity:
                 lfuList = self.freqMap[self.minFreq]
-                evicted = lfuList.pop()
-                assert evicted is not None
-                del self.cache[evicted.key]
-                self.size -= 1
+                evicted = lfuList.pop_back()
+                if evicted:
+                    del self.cache[evicted.key]
+                    self.size -= 1
 
             node = Node(key, value)
             self.cache[key] = node
-            self.freqMap[1].push(node)
+            self.freqMap[1].push_front(node)
             self.minFreq = 1
             self.size += 1
 
-    def _update(self, node: "Node") -> None:
+    def _update(self, node: Node) -> None:
         freq = node.freq
         self.freqMap[freq].remove(node)
-        if freq == self.minFreq and self.freqMap[freq].size == 0:
+        if freq == self.minFreq and len(self.freqMap[freq]) == 0:
             self.minFreq += 1
 
         node.freq += 1
-        self.freqMap[node.freq].push(node)
+        self.freqMap[node.freq].push_front(node)
+
+    def __str__(self) -> str:
+        """Return a string representation of the cache."""
+        result = "LFUCache:\n"
+        for freq, dll in self.freqMap.items():
+            if len(dll) > 0:
+                result += f"Freq {freq}: {dll}\n"
+        return result
+
+    def __len__(self) -> int:
+        """Return the number of items in the cache."""
+        return self.size
 
 
 def lfu_cache(maxsize: int = 128) -> Callable[..., Any]:

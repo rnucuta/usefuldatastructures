@@ -40,7 +40,7 @@ class TestDisjointSet(unittest.TestCase):
         ds.union('c', 'd')
         # All should have the same representative
         rep = ds.find_set('a')
-        for k in 'bcde':
+        for k in 'bcd':
             self.assertEqual(ds.find_set(k), rep)
         self.assertEqual(ds.get_num_djsets(), 2)  # 'e' is still separate
 
